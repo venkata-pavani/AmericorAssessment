@@ -20,7 +20,7 @@ select department, month , old_value,sum(cnt) as TotalActionChange
 from cte2 group by department,month,old_value)
 ,cte4 as (
 select department,month,old_value,sum(TotalActionChange) as TotalActionCount
-,COALESCE(lag(sum(TotalActionChange)) over (partition by department order by old_value,month),0) as prev_count
+,COALESCE(lag(sum(TotalActionChange)) over (partition by department,old_value order by old_value,month),0) as prev_count
 from cte3 where rnk <=3 group by department,month,old_value)
 
 select department , month,old_value as actiontochange,crm_object_description as actiontochangestatus
