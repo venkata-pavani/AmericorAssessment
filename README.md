@@ -27,3 +27,8 @@ Implemented the most recent top 3 client statuses by extracting the recent logs 
 
 Extracted all the teams in the SALES deaprtment  and merged with the USERTEAM table to find the head count of all staff members
 
+*Some prior findinds to understand data
+
+![image](https://user-images.githubusercontent.com/12963112/187609758-5c94e7f7-e9bc-435c-8afa-833a4976c089.png)
+
+
