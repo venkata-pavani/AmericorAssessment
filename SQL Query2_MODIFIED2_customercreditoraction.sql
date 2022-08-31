@@ -20,11 +20,11 @@ select department, month , old_value,sum(cnt) as TotalActionChange
 from cte2 group by department,month,old_value)
 ,cte4 as (
 select department,month,old_value,sum(TotalActionChange) as TotalActionCount
-,COALESCE(lag(sum(TotalActionChange)) over (partition by department order by old_value,month),0) as prev_count
+,COALESCE(lag(sum(TotalActionChange)) over (partition by department,old_value order by old_value,month),0) as prev_count
 from cte3 where rnk <=3 group by department,month,old_value)
 
 select department , month,old_value as actiontochange,crm_object_description as actiontochangestatus
-,TotalActionCount,ROUND(CAST(100*(CASE WHEN prev_count = 0 THEN 0 ELSE 1.0*(TotalActionCount-prev_count)/prev_count END) AS numeric(12,2)),2) AS MoM_percentage
+,TotalActionCount,prev_count,ROUND(CAST(100*(CASE WHEN prev_count = 0 THEN 0 ELSE 1.0*(TotalActionCount-prev_count)/prev_count END) AS numeric(12,2)),2) AS MoM_percentage
 from cte4 left join [dbo].[crm_dictionary - crm_dictionary] as crm on cte4.old_value = crm.crm_object_id
 where crm.crm_object_name like 'customer_creditor'
  
