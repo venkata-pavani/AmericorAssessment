@@ -15,7 +15,7 @@ select user_id,month,sum(ActionCount) as TotalActionCount
 ,COALESCE(lag(sum(ActionCount)) over (partition by user_id order by month),0) as prev_count
 from cte2 
 where rnk <=3 group by user_id,month)
-select k.user_id,month,TotalActionCount,prev_count,tt.name as Team,dt.title as Department
+select k.user_id,tt.name as Team,month,TotalActionCount,dt.title as Department
 ,ROUND(CAST(100*(CASE WHEN prev_count = 0 THEN 0 ELSE 1.0*(TotalActionCount-prev_count)/prev_count END) AS numeric(12,2)),2) AS MoM_percentage
 
 from cte3 as k left join [dbo].[user_team - user] as ut on ut.user_id = k.user_id
